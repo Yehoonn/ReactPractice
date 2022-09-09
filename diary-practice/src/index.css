@@ -1,0 +1,18 @@
+* {
+  transition: 1s;
+  font-family: "Do Hyeon", sans-serif;
+}
+body {
+  background-color: slategrey;
+  margin: 0px;
+  border: 0px;
+  box-sizing: border-box;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
