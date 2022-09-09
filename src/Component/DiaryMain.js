@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import styled from "styled-components";
 
 const DiaryBox = styled.div`
@@ -93,14 +93,14 @@ const ItemDeleteButton = styled.button`
 
 const DiaryMain = () => {
   const Input = useRef();
-  const ItemEle = useRef();
 
   const [input, setInput] = useState({
     text: "",
   });
-  const [Item, setItem] = useState([]);
 
-  const [key, setKey] = useState(1);
+  const [key, setKey] = useState(2);
+
+  const [Item, setItem] = useState([]);
 
   const inputBoxFocus = () => {
     Input.current.focus();
@@ -110,42 +110,79 @@ const DiaryMain = () => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
-  const deleteItem = (id) => {
-    const filterItem = Item.filter((value) => value.key !== id);
+  const deleteItem = (key) => {
+    const filterList = Item.filter((value) => value.id !== key);
 
-    setItem(filterItem);
+    setItem(filterList);
   };
 
   const ListAdd = () => {
+    if (Item.findIndex((value) => value.text === input.text) !== -1) {
+      alert("중복된 일기입니다");
+      return;
+    }
+
     if (input.text.length <= 0) {
       Input.current.focus();
       alert("데이터를 입력해주세요");
       return;
     }
 
-    let newList = Item.concat(
-      <ItemElement key={key} ref={ItemEle}>
-        <ItemDiv>{input.text}</ItemDiv>
-        <ItemEditButton>변경</ItemEditButton>
-        <ItemDeleteButton
-          onClick={() => {
-            deleteItem(key);
-          }}
-        >
-          삭제
-        </ItemDeleteButton>
-      </ItemElement>
-    );
+    let newList = Item.concat({
+      id: key,
+      text: input.text,
+    });
     setKey(key + 1);
     setItem(newList);
     setInput({ text: "" });
   };
+
+  // 새로운 리스트를 만드려고 사용했지만
+  // Item의 데이터를 기반으로 map 함수를 사용하여 태그를 그려주는 방식과 달리
+  // 직접 태그를 넣어서 추가시키는 것은 얼핏 보면 정상적으로 작동하는 것 같지만
+  // id값을 부여하거나 또 다른 데이터를 추가시키는데에는 에로사항이 있었다
+  // 또한 그로 인해 아이템을 삭제할때 filter를 사용했음에도 문제가 생겼는데
+  // 아이템이 5개라면 5번부터 1번까지 아이템을 삭제하는덴 오류가 없었지만
+  // 5개인 상태에서 1번을 누르면 아이템이 다 사라진다
+  // 2번을 누르면 2번을 포함해 2345번이 사라진다
+  // 그래서 오류를 해결하던 중 어째서 이렇게 작동하는지 이해가 되질 않아 (내 생각엔 1번을 누르면 5까지 가기전에 냅다 필터링 해버리는 것 같다)
+  // Item의 데이터 (배열의 갯수)만큼 태그를 그려주는 map을 사용하여 그려보니
+  // filter안의 알고리즘이 거의 똑같음에도 아까와 같은 오류가 나지 않았다
+  // 추후 질문을 해보고 확실한 답을 찾아야겠다
+
+  // let newList = Item.concat(
+  //   <ItemElement key={key}>
+  //     <ItemDiv>{value.text}</ItemDiv>
+  //     <ItemEditButton>변경</ItemEditButton>
+  //     <ItemDeleteButton
+  //       onClick={() => {
+  //         deleteItem(key);
+  //       }}
+  //     >
+  //       삭제
+  //     </ItemDeleteButton>
+  //   </ItemElement>
+  // );
 
   const EnterPress = (e) => {
     if (e.key === "Enter") {
       ListAdd();
     }
   };
+
+  const ItemList = Item.map((value) => (
+    <ItemElement key={value.id}>
+      <ItemDiv>{value.text}</ItemDiv>
+      <ItemEditButton>변경</ItemEditButton>
+      <ItemDeleteButton
+        onClick={() => {
+          deleteItem(value.id);
+        }}
+      >
+        삭제
+      </ItemDeleteButton>
+    </ItemElement>
+  ));
 
   return (
     <>
@@ -163,7 +200,7 @@ const DiaryMain = () => {
             <i class="fa-solid fa-plus"></i>
           </InputButton>
         </InputBox>
-        <ItemBox>{Item}</ItemBox>
+        <ItemBox>{ItemList}</ItemBox>
       </DiaryBox>
     </>
   );
