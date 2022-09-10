@@ -1,9 +1,11 @@
 * {
-  transition: 1s;
+  transition: 0.5s;
   font-family: "Do Hyeon", sans-serif;
 }
 body {
-  background-color: slategrey;
+  background-image: url("https://picsum.photos/id/10/1920/1080");
+  background-repeat: no-repeat;
+  background-size: cover;
   margin: 0px;
   border: 0px;
   box-sizing: border-box;

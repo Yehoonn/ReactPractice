@@ -4,6 +4,7 @@ import "./App.css";
 function App() {
   return (
     <>
+      {/* 다이어리 컴포넌트 호출 */}
       <DiaryMain />
     </>
   );
