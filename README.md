@@ -23,6 +23,6 @@
 
 => 부모가 자식 컴포넌트를 호출할때 인자로 넘겨주면 자식 컴포넌트에서 사용이 가능했다
 
-=> ex) const Parent = () => { return (<> `<ChildrenComponent arg={arg}/>` </>) }
+=> ex) const Parent = () => { [args,setArgs] = useState(); return (<> `<ChildrenComponent arg={arg}/>` </>) }
 
 => ex) const ChildrenComponent = (arg) => { return `<div>{arg}</div>` }
