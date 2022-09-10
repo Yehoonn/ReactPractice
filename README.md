@@ -16,10 +16,13 @@
 작성해서 추가시켜보니 관리하는 부분에서 정상적으로 작동하지 않았다 (filter 작동이 정상적이지 않음)
 
 => 전체적인 코드를 수정하여 아이템이 생성될땐 state에 데이터만 추가되고 (id,text)
+
 => 이 추가된 데이터를 바탕으로 map함수를 이용해 태그를 그려냈다 (수정 후 filter는 정상적으로 작동)
 
 컴포넌트를 모듈화 시키는 과정에서 자식 컴포넌트가 부모의 함수나 state를 어떻게 사용하는지에 대한 고민
 
 => 부모가 자식 컴포넌트를 호출할때 인자로 넘겨주면 자식 컴포넌트에서 사용이 가능했다
+
 => ex) const parent = () => { return (<> <childrenComponent arg={arg}/> </>) }
+
 => ex) const childrenComponent = (arg) => { return <div>{arg}</div> }
